@@ -7,19 +7,28 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous"> 
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet"> 
     <title>TESTSIDAN</title>
   </head>
+
   <body>
-    <h1>TESTSIDAN</h1>
-    <p>Här kan du testköpa något med stripe</p>
-    <button id="makePurchase1">LÄGG TILL PRODUKT 1</button>
-    <br />
-    <button id="makePurchase2">LÄGG TILL PRODUKT 2</button>
-    <br />
+    <header>
+      <div class="header">
+          <div>
+              <a class="removeLinkStyle" id="techStoreLogo" href="index.html"><h1>TechStore</h1></a>
+          </div>
+          <div> 
+              <span id="cartSpan">0</span>
+              <a class="removeLinkStyle" id="aKundvagnColor" href="http://localhost:3000/checkout.html"><i class="fas fa-shopping-cart fa-2x"></i></a>
+          </div>
+      </div>
+          
+      
+   </header>
+    <main id="mainContent"></main>
     <button>
       <a href="http://localhost:3000/checkout.html">GÅ TILL KASSAN</a>
     </button>
-    <br>
-    <div id="main"></div>
   </body>
 </html>

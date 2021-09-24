@@ -1,12 +1,6 @@
-const btn1 = document.getElementById("makePurchase1");
-btn1.addEventListener("click", () => addProduct("produkt1"));
-
-const btn2 = document.getElementById("makePurchase2");
-btn2.addEventListener("click", () => addProduct("produkt2"));
-
 const productsDB = {
   produkt1: {
-    images:"iphone12.png",
+    images: "iphone12.png",
     description: "En produktbeskrivning",
     price_data: {
       currency: "sek",
@@ -17,7 +11,7 @@ const productsDB = {
     },
   },
   produkt2: {
-    images:"iphone12.png",
+    images: "iphone12.png",
     description: "En annan produktbeskrivning",
     price_data: {
       currency: "sek",
@@ -29,8 +23,9 @@ const productsDB = {
   },
 };
 
-
-
+const transformToCommaSeparator = (number) => {
+  return number.toString().replace(".", ",");
+};
 
 let cart = {};
 
@@ -40,7 +35,6 @@ const addProduct = async (productKey) => {
     throw new Error("Product does not exist");
   }
 
-  
   cart[productKey] = cart[productKey] || product;
   cart[productKey].quantity = cart[productKey].quantity || 0;
   cart[productKey].quantity++;
@@ -48,33 +42,57 @@ const addProduct = async (productKey) => {
   localStorage.setItem("cart", JSON.stringify(cart));
 };
 
-
-function renderProducts(){
+function renderProducts() {
+  let mainContent = document.getElementById("mainContent");
   
-  let main = document.getElementById("main")
+  Object.entries(productsDB).map((e) => {
+    console.log(e);
 
-  Object.entries(productsDB).map(e => {
-    console.log(e)
-  let titleContainer = document.createElement("h3")
-  titleContainer.innerText = e[0]
+    let mainContainer = document.createElement("div");
+    mainContainer.id = "mainContainer";
+   
 
-  let description = document.createElement("h5")
-  description.innerText = e[1].description
+    let titleContainer = document.createElement("div");
+    titleContainer.id = "titleContainer";
+    titleContainer.innerText = e[0];
 
-  let imgContainer = document.createElement("img")
-  imgContainer.src = e[1].images
+    let descriptionContainer = document.createElement("div");
+    descriptionContainer.id = "descriptionContainer";
+    descriptionContainer.innerText = e[1].description;
 
-  let buyBtn = document.createElement("button")
-  buyBtn.innerText = "lägg till produkt"
-  buyBtn.addEventListener("click", () => addProduct(e[0]))  
+    let imgContainer = document.createElement("img");
+    imgContainer.id = "imgContainer";
+    imgContainer.src = e[1].images;
 
-  main.appendChild(titleContainer)
-  main.appendChild(description)
-  main.appendChild(imgContainer)
-  main.appendChild(buyBtn)  
-  }) 
-  
-  
+    let priceContainer = document.createElement("div");
+    priceContainer.id = "priceContainer";
+    priceContainer.innerHTML =
+      transformToCommaSeparator(
+        (Math.round(e[1].price_data.unit_amount) / 100).toFixed(2)
+      ) +
+      " " +
+      "kr";
+
+    let cartIcon = document.createElement("i");
+    cartIcon.classList = "fas fa-cart-arrow-down";
+
+    let buyButton = document.createElement("button");
+    buyButton.id = "buyButton";
+    buyButton.addEventListener("click", () => addProduct(e[0]));
+    
+    let buyBtnTxt = document.createElement("p");
+    buyBtnTxt.innerHTML = "Lägg till i kundvagnen";
+    
+
+    mainContainer.appendChild(titleContainer);
+    mainContainer.appendChild(descriptionContainer);
+    mainContainer.appendChild(imgContainer);
+    mainContainer.appendChild(priceContainer);
+    buyButton.appendChild(cartIcon);
+    mainContainer.appendChild(buyButton);
+    buyButton.appendChild(buyBtnTxt);
+    mainContent.appendChild(mainContainer)
+  });
 }
 
-renderProducts()
+renderProducts();
