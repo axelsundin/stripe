@@ -44,13 +44,16 @@ const addProduct = async (productKey) => {
 
 function renderProducts() {
   let mainContent = document.getElementById("mainContent");
-  
+  let greyBackground = true;
   Object.entries(productsDB).map((e) => {
     console.log(e);
 
     let mainContainer = document.createElement("div");
     mainContainer.id = "mainContainer";
-   
+    if (greyBackground == true) {
+      mainContainer.classList = "mainContainerGrey";
+    }
+    greyBackground = !greyBackground;
 
     let titleContainer = document.createElement("div");
     titleContainer.id = "titleContainer";
@@ -79,10 +82,9 @@ function renderProducts() {
     let buyButton = document.createElement("button");
     buyButton.id = "buyButton";
     buyButton.addEventListener("click", () => addProduct(e[0]));
-    
+
     let buyBtnTxt = document.createElement("p");
     buyBtnTxt.innerHTML = "Lägg till i kundvagnen";
-    
 
     mainContainer.appendChild(titleContainer);
     mainContainer.appendChild(descriptionContainer);
@@ -91,7 +93,7 @@ function renderProducts() {
     buyButton.appendChild(cartIcon);
     mainContainer.appendChild(buyButton);
     buyButton.appendChild(buyBtnTxt);
-    mainContent.appendChild(mainContainer)
+    mainContent.appendChild(mainContainer);
   });
 }
 
