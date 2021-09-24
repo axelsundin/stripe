@@ -27,6 +27,11 @@ if (cart == null) {
   Object.entries(cart).map((e) => {
     totalPrice = totalPrice + e[1].price_data.unit_amount * e[1].quantity;
     console.log(e);
+
+    const productImg = document.createElement("img");
+    productImg.src = e[1].images
+    containerDiv.appendChild(productImg);
+    
     const productName = document.createElement("h3");
     productName.innerText = e[0];
     const productDescription = document.createElement("p");
@@ -44,7 +49,11 @@ if (cart == null) {
     containerDiv.appendChild(productDescription);
     containerDiv.appendChild(productQuantity);
     containerDiv.appendChild(separationLine);
+    console.log(e)
+    delete e[1].images
+
   });
+  
 
   productsTotalPrice.innerText =
     "Summa: " +
@@ -63,6 +72,7 @@ const checkout = async () => {
     if (Object.keys(cart).length == 0) {
       throw new Error("No products added");
     }
+    
     const response = await fetch("/api/session/new", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
