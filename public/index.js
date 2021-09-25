@@ -97,4 +97,44 @@ function renderProducts() {
   });
 }
 
-renderProducts();
+const verify = async () => {
+  try {
+    const sessionId = localStorage.getItem("session");
+    if (!sessionId) {
+      throw new Error("No session id to verify");
+    }
+
+    const response = await fetch("/api/session/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+      }),
+    });
+    const { paid } = await response.json();
+    return paid;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};
+
+async function main() {
+  renderProducts();
+  const isVerified = await verify();
+  console.log(isVerified);
+
+  if (localStorage.getItem("session")) {
+    if (isVerified) {
+      alert("Tack för ditt köp");
+      localStorage.removeItem("cart");
+    } else {
+      alert(
+        "Köp avbrutet. Sessionen tas bort men produkterna är kvar i localstorage"
+      );
+    }
+    localStorage.removeItem("session");
+  }
+}
+
+main();
