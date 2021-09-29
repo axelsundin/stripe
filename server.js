@@ -22,10 +22,15 @@ app.post("/api/session/new", async (req, res) => {
 });
 
 app.post("/api/session/verify/:sessionId", async (req, res) => {
-  const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
-  const lineItems = await stripe.checkout.sessions.listLineItems(
-    req.params.sessionId
+  const session = await stripe.checkout.sessions.retrieve(
+    req.params.sessionId,
+    {
+      expand: ["line_items"],
+    }
   );
+  /* const lineItems = await stripe.checkout.sessions.listLineItems(
+    req.params.sessionId
+  ); */
 
   if (session.payment_status == "paid") {
     //Spara
@@ -42,13 +47,40 @@ app.post("/api/session/verify/:sessionId", async (req, res) => {
     if (!data[key]) {
       data[key] = {
         sessionId: req.params.sessionId,
+        paymentIntent: session.payment_intent,
         customerId: session.customer,
         date: new Date(),
         customerEmail: session.customer_details.email,
-        totalPrice: session.amount_total / 100,
-        products: lineItems.data,
-        key: key,
-        //metadata: session.metadata,
+        totalPrice: session.amount_total,
+        currency: session.currency,
+        products: session.line_items.data.map(
+          ({ id, description, price, quantity, amount_total }) => {
+            return {
+              id: id,
+              description: description,
+              unit_price: price.unit_amount,
+              currecny: price.currency,
+              quantity: quantity,
+              totalPrice: amount_total,
+            };
+          }
+        ),
+        /*  products: session.line_items.data.map(
+          ({ id, description, price, quantity, amount_total }) => {
+            return {
+              id: id,
+              description: description,
+              price: price.map(({ unit_amount, currency }) => {
+                return {
+                  unit_price: unit_amount,
+                  currecny: currency,
+                };
+              }),
+              quantity: quantity,
+              totalPrice: amount_total,
+            };
+          }
+        ), */
       };
       data.push(data[key]);
       fs.writeFileSync("orders.json", JSON.stringify(data));
