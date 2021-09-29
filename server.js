@@ -28,21 +28,13 @@ app.post("/api/session/verify/:sessionId", async (req, res) => {
       expand: ["line_items"],
     }
   );
-  /* const lineItems = await stripe.checkout.sessions.listLineItems(
-    req.params.sessionId
-  ); */
 
   if (session.payment_status == "paid") {
     //Spara
     const key = session.payment_intent;
 
-    //const paymentIntent = await stripe.paymentIntents.retrieve(
-    //  session.payment_intent
-    //);
-
     let raw = fs.readFileSync("orders.json");
     let data = JSON.parse(raw);
-    //console.log(data);
 
     if (!data[key]) {
       data[key] = {
@@ -59,28 +51,12 @@ app.post("/api/session/verify/:sessionId", async (req, res) => {
               id: id,
               description: description,
               unit_price: price.unit_amount,
-              currecny: price.currency,
+              currency: price.currency,
               quantity: quantity,
               totalPrice: amount_total,
             };
           }
         ),
-        /*  products: session.line_items.data.map(
-          ({ id, description, price, quantity, amount_total }) => {
-            return {
-              id: id,
-              description: description,
-              price: price.map(({ unit_amount, currency }) => {
-                return {
-                  unit_price: unit_amount,
-                  currecny: currency,
-                };
-              }),
-              quantity: quantity,
-              totalPrice: amount_total,
-            };
-          }
-        ), */
       };
       data.push(data[key]);
       fs.writeFileSync("orders.json", JSON.stringify(data));
