@@ -77,8 +77,6 @@ const checkout = async () => {
       }),
     });
     const { id } = await response.json();
-    console.log(id);
-    localStorage.setItem("session", id);
     stripe.redirectToCheckout({ sessionId: id });
   } catch (err) {
     console.log(err);

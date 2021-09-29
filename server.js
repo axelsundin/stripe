@@ -14,23 +14,26 @@ app.post("/api/session/new", async (req, res) => {
     payment_method_types: ["card"],
     line_items: req.body.line_items,
     mode: "payment",
-    success_url: "http://localhost:3000/",
-    cancel_url: "http://localhost:3000/",
+    success_url:
+      "http://localhost:3000/checkout_success.html?session_id={CHECKOUT_SESSION_ID}",
+    cancel_url: "http://localhost:3000/checkout.html",
   });
   res.status(200).json({ id: session.id });
 });
 
-app.post("/api/session/verify", async (req, res) => {
-  const sessionId = req.body.sessionId;
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
+app.post("/api/session/verify/:sessionId", async (req, res) => {
+  const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+  const lineItems = await stripe.checkout.sessions.listLineItems(
+    req.params.sessionId
+  );
 
   if (session.payment_status == "paid") {
     //Spara
     const key = session.payment_intent;
 
-    /* const paymentIntent = await stripe.paymentIntents.retrieve(
-      session.payment_intent
-    ); */
+    //const paymentIntent = await stripe.paymentIntents.retrieve(
+    //  session.payment_intent
+    //);
 
     let raw = fs.readFileSync("orders.json");
     let data = JSON.parse(raw);
@@ -38,9 +41,13 @@ app.post("/api/session/verify", async (req, res) => {
 
     if (!data[key]) {
       data[key] = {
-        amount: session.amount_total / 100,
+        sessionId: req.params.sessionId,
         customerId: session.customer,
+        date: new Date(),
         customerEmail: session.customer_details.email,
+        totalPrice: session.amount_total / 100,
+        products: lineItems.data,
+        key: key,
         //metadata: session.metadata,
       };
       data.push(data[key]);
@@ -50,7 +57,6 @@ app.post("/api/session/verify", async (req, res) => {
   } else {
     res.status(200).json({ paid: false });
   }
-  //console.log(session);
 });
 
 app.get("/api/admin/purchases", async (req, res) => {

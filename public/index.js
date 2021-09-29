@@ -97,7 +97,7 @@ function renderProducts() {
   });
 }
 
-const verify = async () => {
+/* const verify = async () => {
   try {
     const sessionId = localStorage.getItem("session");
     if (!sessionId) {
@@ -138,3 +138,6 @@ async function main() {
 }
 
 main();
+ */
+
+renderProducts();
