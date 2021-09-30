@@ -21,78 +21,46 @@ if (cart == null) {
   containerDiv.appendChild(emptyCart);
   containerDiv.appendChild(returnToStartBtn);
 } else {
-  const productsTotalPrice = document.getElementById("summa");
+  const productsTotalPrice = document.createElement("h3");
   let totalPrice = 0;
 
   Object.entries(cart).map((e) => {
     totalPrice = totalPrice + e[1].price_data.unit_amount * e[1].quantity;
     console.log(e);
-
-    let indexContainer = document.getElementById("index")
-    let textContainer = document.createElement("div")
-    let imgContainer = document.createElement("div")    
-
-    let cardContainer = document.createElement("div")
-    cardContainer.className = "cardContainer" 
-    cardContainer.id = "cardContainer"
-    
     const productImg = document.createElement("img");
     productImg.src = e[1].images;
-    
-    /* containerDiv.appendChild(productImg); */
-    
-    const productTitle = document.createElement("h1");
-    productTitle.innerText = e[0];
-    
+    containerDiv.appendChild(productImg);
+    const productName = document.createElement("h3");
+    productName.innerText = e[0];
     const productDescription = document.createElement("p");
     productDescription.innerText = e[1].description;
-    
     const productPrice = document.createElement("h4");
     productPrice.innerText =
       transformToCommaSeparator(
         (Math.round(e[1].price_data.unit_amount) / 100).toFixed(2)
       ) + " SEK";
-    
-      const productQuantity = document.createElement("h4");
+    const productQuantity = document.createElement("h4");
     productQuantity.innerText = "Antal: " + e[1].quantity;
-    
     const separationLine = document.createElement("hr");
-
-    imgContainer.className = "imgContainer"
-        textContainer.className = "textContainer"
-        productImg.className = "productImg"  
-    
-        indexContainer.appendChild(cardContainer)
-        textContainer.appendChild(productTitle)
-        cardContainer.appendChild(imgContainer)
-        imgContainer.appendChild(productImg)
-        cardContainer.appendChild(textContainer)
-
-    
-        textContainer.appendChild(productPrice)
-    
-    /* containerDiv.appendChild(productName); */
-    /* containerDiv.appendChild(productPrice); */
-   /*  containerDiv.appendChild(productDescription); */
-    textContainer.appendChild(productQuantity);
-    /* containerDiv.appendChild(separationLine); */
+    containerDiv.appendChild(productName);
+    containerDiv.appendChild(productPrice);
+    containerDiv.appendChild(productDescription);
+    containerDiv.appendChild(productQuantity);
+    containerDiv.appendChild(separationLine);
     console.log(e);
-    
     delete e[1].images;
-    
-
   });
 
   productsTotalPrice.innerText =
     "Summa: " +
     transformToCommaSeparator((Math.round(totalPrice) / 100).toFixed(2)) +
     " SEK";
-  /* containerDiv.appendChild(productsTotalPrice); */
+  containerDiv.appendChild(productsTotalPrice);
 
-  const checkoutBtn = document.getElementById("checkOutBtn");
+  const checkoutBtn = document.createElement("button");
   checkoutBtn.innerText = "Gå vidare till kassan";
   checkoutBtn.addEventListener("click", () => checkout());
-  /* containerDiv.appendChild(checkoutBtn); */
+  containerDiv.appendChild(checkoutBtn);
 }
 
 const checkout = async () => {

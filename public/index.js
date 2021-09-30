@@ -1,24 +1,24 @@
 const productsDB = {
-  "iPhone 12": {
+  produkt1: {
     images: "iphone12.png",
-    description: "A huge leap forward with unbeatable camera in dim light.",
+    description: "En produktbeskrivning",
     price_data: {
       currency: "sek",
       product_data: {
-        name: "iPhone 12",
+        name: "Produktnamn 1",
       },
-      unit_amount: 1200000,
+      unit_amount: 9000,
     },
   },
-  "iPhone X": {
-    images: "iPhoneX.png",
-    description: "Last years phone from Apple with a beautiful all display front.",
+  produkt2: {
+    images: "iphone12.png",
+    description: "En annan produktbeskrivning",
     price_data: {
       currency: "sek",
       product_data: {
-        name: "iPhone X",
+        name: "Produktnamn 2",
       },
-      unit_amount: 1000000,
+      unit_amount: 4900,
     },
   },
 };
