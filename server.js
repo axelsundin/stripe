@@ -28,42 +28,35 @@ app.post("/api/session/verify/:sessionId", async (req, res) => {
       expand: ["line_items"],
     }
   );
-
-  if (session.payment_status == "paid") {
-    //Spara
-    const key = session.payment_intent;
-
-    let raw = fs.readFileSync("orders.json");
-    let data = JSON.parse(raw);
-
-    if (!data[key]) {
-      data[key] = {
-        sessionId: req.params.sessionId,
-        paymentIntent: session.payment_intent,
-        customerId: session.customer,
-        date: new Date(),
-        customerEmail: session.customer_details.email,
-        totalPrice: session.amount_total,
-        currency: session.currency,
-        products: session.line_items.data.map(
-          ({ id, description, price, quantity, amount_total }) => {
-            return {
-              id: id,
-              description: description,
-              unit_price: price.unit_amount,
-              currency: price.currency,
-              quantity: quantity,
-              totalPrice: amount_total,
-            };
-          }
-        ),
-      };
-      data.push(data[key]);
-      fs.writeFileSync("orders.json", JSON.stringify(data));
-    }
-    res.status(200).json({ paid: true });
+  let raw = fs.readFileSync("orders.json");
+  let data = JSON.parse(raw);
+  if (!data.some((obj) => obj.sessionId === req.params.sessionId)) {
+    newOrder = {
+      sessionId: req.params.sessionId,
+      paymentIntent: session.payment_intent,
+      customerId: session.customer,
+      date: new Date(),
+      customerEmail: session.customer_details.email,
+      totalPrice: session.amount_total,
+      currency: session.currency,
+      products: session.line_items.data.map(
+        ({ id, description, price, quantity, amount_total }) => {
+          return {
+            id: id,
+            description: description,
+            unit_price: price.unit_amount,
+            currency: price.currency,
+            quantity: quantity,
+            totalPrice: amount_total,
+          };
+        }
+      ),
+    };
+    data.push(newOrder);
+    fs.writeFileSync("orders.json", JSON.stringify(data));
+    res.status(200).json({ saved: true });
   } else {
-    res.status(200).json({ paid: false });
+    res.status(200).json({ saved: false });
   }
 });
 

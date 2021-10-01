@@ -1,7 +1,11 @@
-//session id from url
+window.onload = () => {
+  verify();
+};
+
 let url = new URL(window.location);
 let params = new URLSearchParams(url.search);
 let sessionId = params.get("session_id");
+let text = document.getElementById("text");
 
 const verify = async () => {
   try {
@@ -9,10 +13,12 @@ const verify = async () => {
       method: "POST",
     });
     const isVerified = await response.json();
-    console.log(isVerified);
+    if (isVerified.saved) {
+      text.innerText = "Tack för ditt köp!";
+    } else {
+      text.innerText = "Den här ordern är redan lagd.";
+    }
   } catch (err) {
     console.log(err);
   }
 };
-
-verify();
