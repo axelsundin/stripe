@@ -1,5 +1,6 @@
 window.onload = () => {
   verify();
+  localStorage.clear();
 };
 
 let url = new URL(window.location);
