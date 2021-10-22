@@ -1,6 +1,6 @@
 const productsDB = {
   "iPhone 12": {
-    images: "iphone12.png",
+    img: "iphone12.png",
     description: "A huge leap forward with unbeatable camera in dim light.",
     price_data: {
       currency: "sek",
@@ -11,7 +11,7 @@ const productsDB = {
     },
   },
   "iPhone X": {
-    images: "iPhoneX.png",
+    img: "iPhoneX.png",
     description:
       "Last years phone from Apple with a beautiful all display front.",
     price_data: {
@@ -66,7 +66,7 @@ function renderProducts() {
 
     let imgContainer = document.createElement("img");
     imgContainer.id = "imgContainer";
-    imgContainer.src = e[1].images;
+    imgContainer.src = e[1].img;
 
     let priceContainer = document.createElement("div");
     priceContainer.id = "priceContainer";

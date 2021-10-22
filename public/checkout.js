@@ -38,7 +38,7 @@ if (cart == null || Object.keys(cart).length < 1) {
     cardContainer.id = "cardContainer";
 
     const productImg = document.createElement("img");
-    productImg.src = e[1].images;
+    productImg.src = e[1].img;
 
     /* containerDiv.appendChild(productImg); */
 
@@ -104,6 +104,13 @@ if (cart == null || Object.keys(cart).length < 1) {
 }
 
 const checkout = async () => {
+  //removes img from cart object that causes stripe error
+  Object.entries(cart).map((e) => {
+    console.log(e);
+    cart[delete e[1].img];
+    console.log(cart);
+  });
+
   try {
     if (Object.keys(cart).length == 0) {
       throw new Error("No products added");
