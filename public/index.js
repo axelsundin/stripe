@@ -12,7 +12,8 @@ const productsDB = {
   },
   "iPhone X": {
     images: "iPhoneX.png",
-    description: "Last years phone from Apple with a beautiful all display front.",
+    description:
+      "Last years phone from Apple with a beautiful all display front.",
     price_data: {
       currency: "sek",
       product_data: {
@@ -27,7 +28,7 @@ const transformToCommaSeparator = (number) => {
   return number.toString().replace(".", ",");
 };
 
-let cart = {};
+const cart = JSON.parse(localStorage.getItem("cart")) || {};
 
 const addProduct = async (productKey) => {
   const product = productsDB[productKey];
